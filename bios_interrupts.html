@@ -1,0 +1,33 @@
+<html><head><style>div{position:absolute;top:0;height:100vh;border-right:1px solid black}li{margin:8px;padding-top:4px;text-decoration:underline;list-style-type:none}p{margin-left:20px;}a{display:block;}</style></head><body><div id="a"style="left:0;width:10vw;"></div><div id="b"style="left:10vw;width:25vw;"></div><div style="left:35vw;width:40vw;border:0"><p id="c"></p></div><script>var o=(_,$)=>Object.entries(_).forEach($),z,s={
+    10:{
+        "00":{t:"Set video mode",d:"",e:"",v:{AL:["video mode",{"0x00":"text mode, 40x25. 16 colors. 8 pages","0x03":"text mode, 80x25. 16 colors. 8 pages","0x13":"graphical mode. 40x25. 256 colors. 320x200 pixels. 1 page."}]},r:{}},
+        "01":{t:"Set text-mode cursor shape",d:"",e:"",v:{CH:["cursor start line (bits 0:4) and options (bits 5:7)",{"":"if bit 5 is set the cursor is not visible"}],CL:["bottom cursor line (bits 0:4)"]},r:{}},
+        "02":{t:"Set cursor position",d:"",e:"",v:{DH:["row"],DL:["column"],BH:["page number",{"0..7":"page range"}]},r:{}},
+        "03":{t:"Get cursor position and size",d:"",e:"",v:{BH:["page number"]},r:{DH:["row"],DL:["column"],CH:["cursor start line"],CL:["cursor bottom line"]}},
+        "05":{t:"Set active video page",d:"",e:"",v:{AL:["new page number",{"0..7":"page range"}]},r:{}},
+        "06":{t:"Scroll up window",d:"",e:"",v:{AL:["number of lines to scroll",{"0":"clears entire window"}],BH:["attribute used to write blank lines at bottom of window"],CH:["row of window's upper left corner"],CL:["column of window's upper left corner"],DH:["row of window's lower right corner"],DL:["column of window's lower right corner"]},r:{}},
+        "07":{t:"Scroll down window",d:"",e:"",v:{AL:["number of lines to scroll",{0:"clears entire window"}],BH:["attribute used to write blank lines at bottom of window"],CH:["row of window's upper left corner"],CL:["column of window's upper left corner"],DH:["row of window's lower right corner"],DL:["column of window's lower right corner"]},r:{AH:["attribute"]}},
+        "08":{t:"Read character and attribute at cursor position",d:"",e:"",v:{BH:["page number"]},r:{AH:["attribute"],AL:["character"]}},
+        "09":{t:"Write character and attribute at cursor position",d:"",e:"",v:{AL:["character to display"],BH:["page number"],BL:["attribute"],CX:["number of times to write character"]},r:{}},
+        "0A":{t:"Write character only at cursor position",d:"",e:"",v:{AL:["character to display"],BX:["page number"],CX:["number of times to write character"]},r:{}},
+        "0C":{t:"Change color for a single pixel",d:"",e:"",v:{AL:["pixel color"],CX:["column"],DX:["row"]},r:{}},
+        "0D":{t:"Get color of a single pixel",d:"",e:"",v:{CX:["column"],DX:["row"]},r:{AL:["pixel color"]}},
+        "0E":{t:"Teletype output",d:"Displays a character on the screen, and also handling cursor advancing and screen scrolling. The printing is always done on the currently active page.",e:"",v:{AL:["character to write"]},r:{}},
+        13:{t:"Write string",d:"",e:"",v:{AL:["write mode",{"bit 0":"update cursor after writing","bit 1":"string contains attributes"}],BH:["page number"],BL:["attribute",{"":"only if string contains only characters (bit 1 of AL is zero)"}],CX:["numbers of characters in string", {"":"not including attributes"}],DL:["column to start writing"],DH:["row to start writing"],"ES:BP":["address of string to be printed"]},r:{}},
+        1003:{t:"Toggle intensity/blinking",d:"",e:"",v:{BL:["write mode",{0:"enable intensive colors",1:"enable blinking"}],BH:["",{"":"0"}]},r:{}}},
+    11:{
+        "":{t:"Get BIOS equipment list",d:"",e:"",v:{},r:{AX:["BIOS equipment list word, returns the contents of 0x40:0x10",{"bits 15:14":"number of parallel devices","bit 13":"reserved","bit 12":"game port installed","bits 11:9":"number of serial devices","bit 8":"reserved","bits 7:6":"Number of floppy disk drive (minus 1)","bits 5:4":"initial video mode 00: EGA,VGA,PGA 01: 40x25 CGA color 10: 80x25 CGA color 11: 80x25 mono text","bit 3":"reserved","bit 2":"PS/2 mouse is installed","bit 1":"math coprocessor installed","bit 0":"set if booted from floppy"}]}}},
+    12:{
+        "":{t:"Get memory size",d:"",e:"",v:{},r:{AX:["kilobytes of contiguous memory starting at absolute address 0x00"]}}},
+    13:{
+        "00":{t:"Reset disk system",d:"",e:"",v:{},r:{}},
+        "02":{t:"Read disk sectors into memory",d:"Each sector has 512 bytes.",e:"",v:{AL:["number of sectors to read/write",{"":"cannot be zero"}],CH:["cylinder number",{"":"0..79"}],CL:["sector number",{"":"1..18"}],DH:["head number",{"":"0..1"}],DL:["drive number",{"":"0..3"}],"ES:BX":["points to data buffer"]},r:{CF:["",{"":"set on error","":"clear if successful"}],AH:["status",{0:"if successful"}],AL:["number of sectors transferred"]}},
+        "03":{t:"Read disk sectors into memory",d:"Each sector has 512 bytes.",e:"",v:{AL:["number of sectors to read/write",{"":"cannot be zero"}],CH:["cylinder number",{"":"0..79"}],CL:["sector number",{"":"1..18"}],DH:["head number",{"":"0..1"}],DL:["drive number",{"":"0..3"}],"ES:BX":["points to data buffer"]},r:{CF:["",{"":"set on error","":"clear if successful"}],AH:["status",{0:"if successful"}],AL:["number of sectors transferred"]}}},
+    15:{
+        86:{t:"BIOS wait function",d:"The resolution of the wait period is 977 microseconds on many systems",e:"",v:{"CX:DX":["interval in microseconds"]},r:{CF:["",{"":"clear if successful (wait interval elapsed)","":"set on error of when wait function is already in progress"}]}}},
+    16:{
+        "00":{t:"Get keystroke from keyboard",d:"No echo. If a keystroke is present, it is removed from the keyboard buffer",e:"",v:{},r:{AH:["BIOS scan code"],AL:["ASCII character"]}},
+        "01":{t:"Check for keystroke in the keyboard buffer",d:"if a keystroke is present it is not removed from the keyboard buffer",e:"",v:{},r:{ZF:["",{1:"if keystroke is not available",0:"if keystroke is available"}],AH:["BIOS scan code"],AL:["ASCII character"]}}},
+    19:{
+        "":{t:"System reboot",d:"",e:"",v:{},r:{}}}
+},x=_=>(z=_,b.innerHTML=(u="<ul>",o(s[_],$=>u+="<li onclick=\"y('"+$[0]+"')\">"+($[0]?"0x"+$[0]+" - ":"")+$[1].t+"</li>"),u+"</ul>")),y=(_,h=j=>(o(s[z][_][j],$=>(u+="<a>"+$[0]+" - "+$[1][0],$[1][1]?o($[1][1],_=>u+="</b><p>"+_[0]+" - "+_[1]+"</p><b>"):0))))=>c.innerHTML=(u="<h1>Interrupt 0x"+z+(_?" - AH 0x"+_:"")+"</h1>"+s[z][_].t+". "+s[z][_].d+"<h3>Arguments</h3><b>",h('v'),u+="</b></a><h3>Return</h3><b>",h('r'),u+"</b><h3>Example</h3>"+s[z][_].e);(_=>a.innerHTML=(u="<ul>",o(s,_=>u+="<li onclick=\"x('"+_[0]+"')\">0x"+_[0]+"</li>"),u+"</ul>"))()</script></body></html>
