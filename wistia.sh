@@ -17,8 +17,9 @@ function bar {
 	echo "[$(dupe \# $num)$(dupe - $(($3 - $num)))]"
 }
 
-URLS=`cat $1`
-NUM=`cat $1 | wc -l`
+[[ ${#} == 0 ]] && URLS=$(</dev/stdin) || URLS=$@
+
+NUM=`echo "$URLS" | wc -w`
 I=0
 for URL in $URLS
 do
