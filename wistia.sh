@@ -2,7 +2,7 @@
 
 function wistia {
 	[[ -z "$2" ]] && OUTPUT=`echo "$1" | grep -o "[A-Za-z0-9.-]*$"` || OUTPUT="$2"
-	TOKEN=`curl $1 | grep -o "/embed/.*/[A-Za-Z0-9]*\"" | sed "s/.*\///; s/\"//"`
+	TOKEN=`curl $1 | grep -o "/embed/[A-Za-z]*/[A-Za-Z0-9]*\"" | sed "s/.*\///; s/\"//"`
 	LINK=`curl "https://fast.wistia.net/embed/iframe/$TOKEN" | grep -o "https://embed-ssl.wistia.com/deliveries/[A-Za-z0-9]*.bin" | head -1`
 	curl "$LINK" > "$OUTPUT"
 }
